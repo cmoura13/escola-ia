@@ -16,5 +16,6 @@ export const SUPABASE_CONFIG = {
 // Verificar se está configurado
 export function isSupabaseConfigured(): boolean {
   return !!SUPABASE_CONFIG.url && !!SUPABASE_CONFIG.anonKey && 
-         SUPABASE_CONFIG.url !== 'https://placeholder.supabase.co'
+         !SUPABASE_CONFIG.url.includes('placeholder') && 
+         !SUPABASE_CONFIG.url.includes('seu-projeto')
 }
