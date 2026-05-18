@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-gray-100 antialiased;
+  }
+
+  ::selection {
+    @apply bg-primary-500/30 text-white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-light rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-surface-hover;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-surface/80 backdrop-blur-lg border border-white/5;
+  }
+
+  .card {
+    @apply bg-surface border border-white/5 rounded-xl p-6 transition-all duration-300 hover:border-primary-500/30;
+  }
+
+  .card-hover {
+    @apply hover:shadow-lg hover:shadow-primary-500/10 hover:-translate-y-1;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-500 text-white px-6 py-2.5 rounded-lg font-medium 
+           transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25 hover:from-primary-500 hover:to-primary-400
+           active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-surface-light border border-white/10 text-gray-200 px-6 py-2.5 rounded-lg font-medium
+           transition-all duration-300 hover:bg-surface-hover hover:border-white/20 active:scale-95;
+  }
+
+  .btn-accent {
+    @apply bg-gradient-to-r from-accent-600 to-accent-500 text-white px-6 py-2.5 rounded-lg font-medium
+           transition-all duration-300 hover:shadow-lg hover:shadow-accent-500/25 hover:from-accent-500 hover:to-accent-400
+           active:scale-95;
+  }
+
+  .input-field {
+    @apply w-full bg-surface-light border border-white/10 rounded-lg px-4 py-3 text-gray-100
+           placeholder:text-gray-500 focus:outline-none focus:border-primary-500/50 focus:ring-2 focus:ring-primary-500/20
+           transition-all duration-300;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-gray-300 mb-1.5;
+  }
+
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold text-white mb-2;
+  }
+
+  .section-subtitle {
+    @apply text-gray-400 text-sm;
+  }
+
+  .progress-bar {
+    @apply h-2 bg-surface-light rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full transition-all duration-500;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge bg-success/20 text-success;
+  }
+
+  .badge-warning {
+    @apply badge bg-warning/20 text-warning;
+  }
+
+  .badge-danger {
+    @apply badge bg-danger/20 text-danger;
+  }
+
+  .badge-primary {
+    @apply badge bg-primary-500/20 text-primary-400;
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 transition-all duration-200
+           hover:bg-white/5 hover:text-white;
+  }
+
+  .sidebar-item-active {
+    @apply sidebar-item bg-primary-500/10 text-primary-400 border-r-2 border-primary-500;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Fullscreen Mode for Lesson Player */
+html[data-player-fullscreen="true"] body > div:first-child > aside:first-child {
+  display: none !important;
+}
+
+html[data-player-fullscreen="true"] body > div:first-child > main {
+  margin-left: 0 !important;
+}
+
+html[data-player-fullscreen="true"] body > div:first-child > main > div:first-child {
+  padding: 0 !important;
+}
+
+/* Tiptap Editor Styles */
+.ProseMirror {
+  @apply min-h-[300px] p-4 outline-none;
+}
+
+.ProseMirror p {
+  @apply mb-4 leading-relaxed;
+}
+
+.ProseMirror h1 {
+  @apply text-3xl font-bold mb-4 text-white;
+}
+
+.ProseMirror h2 {
+  @apply text-2xl font-bold mb-3 text-white;
+}
+
+.ProseMirror h3 {
+  @apply text-xl font-bold mb-2 text-white;
+}
+
+.ProseMirror ul {
+  @apply list-disc list-inside mb-4 space-y-1;
+}
+
+.ProseMirror ol {
+  @apply list-decimal list-inside mb-4 space-y-1;
+}
+
+.ProseMirror blockquote {
+  @apply border-l-4 border-primary-500 pl-4 italic text-gray-300 mb-4;
+}
+
+.ProseMirror code {
+  @apply bg-surface-light px-1.5 py-0.5 rounded text-sm text-accent-400;
+}
+
+.ProseMirror pre {
+  @apply bg-surface-light p-4 rounded-lg mb-4 overflow-x-auto;
+}
+
+.ProseMirror pre code {
+  @apply bg-transparent p-0 text-gray-300;
+}
+
+.ProseMirror img {
+  @apply max-w-full rounded-lg my-4;
+}
+
+.ProseMirror .ProseMirror-selectednode {
+  outline: 3px solid rgba(59, 130, 246, 0.8);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+}
+
+.ProseMirror a {
+  @apply text-primary-400 hover:text-primary-300 underline;
+}
+
+.ProseMirror table {
+  @apply w-full border-collapse mb-4;
+}
+
+.ProseMirror th,
+.ProseMirror td {
+  @apply border border-white/10 px-4 py-2;
+}
+
+.ProseMirror th {
+  @apply bg-surface-light font-semibold text-white;
+}
