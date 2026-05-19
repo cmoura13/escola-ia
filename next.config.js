@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ['sharp'],
-  serverActions: {
-    bodySizeLimit: '10mb'
+  experimental: {
+    serverComponentsExternalPackages: ['sharp'],
+    serverActions: {
+      bodySizeLimit: '10mb'
+    }
   },
   images: {
     remotePatterns: [
