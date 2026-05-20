@@ -33,6 +33,7 @@ import {
   Minus,
   X,
   Loader2,
+  Upload,
 } from 'lucide-react'
 import { cn } from '@/utils'
 
@@ -162,19 +163,47 @@ export default function TiptapEditor({ content, onChange, placeholder = 'Comece 
   const [showImagePicker, setShowImagePicker] = useState(false)
   const [images, setImages] = useState<{ name: string; url: string }[]>([])
   const [imageLoading, setImageLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     if (showImagePicker) {
-      setImageLoading(true)
-      fetch('/api/imagens')
-        .then(res => res.json())
-        .then(data => {
-          setImages(data.images || [])
-          setImageLoading(false)
-        })
-        .catch(() => setImageLoading(false))
+      loadImages()
     }
   }, [showImagePicker])
+
+  async function loadImages() {
+    setImageLoading(true)
+    try {
+      const res = await fetch('/api/imagens')
+      const data = await res.json()
+      setImages(data.images || [])
+    } catch {
+      setImages([])
+    } finally {
+      setImageLoading(false)
+    }
+  }
+
+  async function handleUploadImage(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      const res = await fetch('/api/imagens', { method: 'POST', body: formData })
+      const data = await res.json()
+      if (data.url) {
+        await loadImages()
+      }
+    } catch (err) {
+      console.error('Erro ao enviar imagem:', err)
+    } finally {
+      setUploading(false)
+      e.target.value = ''
+    }
+  }
 
   if (!editor) return null
 
@@ -360,7 +389,7 @@ export default function TiptapEditor({ content, onChange, placeholder = 'Comece 
         </div>
 
         <div className="flex items-center gap-1 pl-2">
-          <ToolbarButton onClick={addImage} icon={ImageIcon} title="Inserir Imagem da pasta imagens/" />
+          <ToolbarButton onClick={addImage} icon={ImageIcon} title="Inserir Imagem" />
           <ToolbarButton onClick={addImageLink} icon={LinkIcon2} title="Adicionar link na imagem selecionada" active={isImageSelected} />
           <ToolbarButton onClick={addVideo} icon={Video} title="Inserir Vídeo" />
         </div>
@@ -394,12 +423,25 @@ export default function TiptapEditor({ content, onChange, placeholder = 'Comece 
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-white">Selecionar Imagem</h3>
-              <button
-                onClick={() => setShowImagePicker(false)}
-                className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                <label className="btn-secondary text-sm flex items-center gap-2 cursor-pointer">
+                  <Upload className="w-4 h-4" />
+                  {uploading ? 'Enviando...' : 'Enviar Imagem'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleUploadImage}
+                    className="hidden"
+                    disabled={uploading}
+                  />
+                </label>
+                <button
+                  onClick={() => setShowImagePicker(false)}
+                  className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {imageLoading ? (
@@ -410,7 +452,7 @@ export default function TiptapEditor({ content, onChange, placeholder = 'Comece 
               <div className="text-center py-12 text-gray-500">
                 <p className="text-lg mb-2">Nenhuma imagem encontrada</p>
                 <p className="text-sm text-gray-600">
-                  Adicione imagens na pasta <code className="bg-surface-light px-1.5 py-0.5 rounded text-xs">imagens/</code> na raiz do projeto
+                  Clique em "Enviar Imagem" para fazer upload ou adicione imagens no Storage do Supabase
                 </p>
               </div>
             ) : (
